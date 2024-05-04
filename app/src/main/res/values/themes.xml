@@ -1,0 +1,23 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Wallpapers" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.Wallpapers" parent="Base.Theme.Wallpapers" />
+
+
+    <style name="dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/rounded_dialog</item>
+        <item name="windowMinWidthMajor">85%</item>
+        <item name="android:windowAnimationStyle">@style/anim1</item>
+    </style>
+
+    <style name="anim1">
+        <item name="android:windowEnterAnimation">@anim/shrin_and_rotate</item>
+        <item name="android:windowExitAnimation">@anim/shrin_and_rotate_exit</item>
+    </style>
+
+
+</resources>
