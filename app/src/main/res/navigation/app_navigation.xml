@@ -19,4 +19,9 @@
         android:name="com.example.wallpapers.fragments.SearchResultFragment"
         android:label="fragment_search_result"
         tools:layout="@layout/fragment_search_result" />
+    <fragment
+        android:id="@+id/searchRawFragment"
+        android:name="com.example.wallpapers.fragments.SearchRawFragment"
+        android:label="fragment_search_raw"
+        tools:layout="@layout/fragment_search_raw" />
 </navigation>

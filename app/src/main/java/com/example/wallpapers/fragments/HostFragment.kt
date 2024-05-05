@@ -2,9 +2,11 @@ package com.example.wallpapers.fragments
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -216,12 +218,21 @@ class HostFragment : Fragment() {
 
 
 
-        dialogView.cancel.setOnClickListener {
-            dialog.cancel()
-        }
 
 
 
+// Set the dialog's view and prevent dismissing on outside touch or back button press
+        dialog.setView(dialogView.root)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                // Consume the back button press event
+                true
+            } else {
+                // Don't consume other key events
+                false
+            }
+        })
 
 
 
@@ -317,6 +328,29 @@ class HostFragment : Fragment() {
             }
 
         }.attach()
+
+
+
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val itemTabBinding = ItemTabBinding.bind(tab?.customView!!)
+                itemTabBinding.circle.visibility = View.VISIBLE
+                itemTabBinding.text.setTextColor(Color.WHITE)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                val itemTabBinding = ItemTabBinding.bind(tab?.customView!!)
+                itemTabBinding.circle.visibility = View.INVISIBLE
+                itemTabBinding.text.setTextColor(Color.parseColor("#808a93"))
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
+
+
     }
 
     private fun setviewPager() {

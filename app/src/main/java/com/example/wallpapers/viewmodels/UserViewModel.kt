@@ -1,6 +1,9 @@
 package com.example.wallpapers.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -9,13 +12,16 @@ import androidx.paging.liveData
 import com.example.wallpapers.retrofit.RetrofitClient
 
 class UserViewModel: ViewModel() {
+    private val _searchQuery = MutableLiveData<String>()
+    val searchQuery: LiveData<String> = _searchQuery
 
-    var word:String = ""
-    val liveData = Pager(PagingConfig(pageSize = 2)){
+    val liveData = _searchQuery.switchMap { query ->
+        Pager(PagingConfig(pageSize = 15)) {
+            UserDataSource(RetrofitClient.apiService, "your_photo_string", query)
+        }.liveData.cachedIn(viewModelScope)
+    }
 
-        UserDataSource(RetrofitClient.apiService,word)
-    }.liveData.cachedIn(viewModelScope)
-
-
-
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
 }

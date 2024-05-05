@@ -6,26 +6,34 @@ import androidx.paging.PagingState
 import com.example.wallpapers.models.Hit
 import com.example.wallpapers.retrofit.RetrofitService
 
-class UserDataSource (val apiService: RetrofitService, val photo:String): PagingSource<Int, Hit>() {
-    private val TAG = "UserDataSource"
+class UserDataSource(
+    private val apiService: RetrofitService,
+    private val photo: String,
+    private val searchQuery: String
+) : PagingSource<Int, Hit>() {
+
     override fun getRefreshKey(state: PagingState<Int, Hit>): Int? {
-        return state.anchorPosition
+        // Since we don't have a way to determine the key for refreshing,
+        // returning null indicates that the PagingSource cannot currently support refreshing.
+        return null
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Hit> {
         try {
-            var pahto:String
-            Log.d(TAG, "load: $photo")
             val nextPageNumber = params.key ?: 1
-            val usersData = apiService.getListPhotos("27240519-6e85e045b4edde1049de33f01",photo,"photo",true,nextPageNumber,15)
-            return LoadResult.Page(usersData.hits,null,nextPageNumber + 1)
-
-        }catch (e: Exception){
+            val usersData = apiService.getListPhotos(
+                "27240519-6e85e045b4edde1049de33f01",
+                searchQuery,
+                "photo",
+                true,
+                nextPageNumber,
+                params.loadSize
+            )
+            return LoadResult.Page(usersData.hits, null, nextPageNumber + 1)
+        } catch (e: Exception) {
             return LoadResult.Error(e)
         }
-
-
-
-
     }
+
+    // Rest of the code...
 }

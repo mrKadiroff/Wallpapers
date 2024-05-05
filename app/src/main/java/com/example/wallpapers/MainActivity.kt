@@ -71,22 +71,15 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setSearch() {
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
+        binding.searchView.setOnClickListener {
+            navController.navigate(R.id.searchResultFragment)
+        }
                 // Handle search query submission
-                Toast.makeText(this@MainActivity, "$query", Toast.LENGTH_SHORT).show()
-                var bundle = Bundle()
-                bundle.putSerializable("wall",query)
-                navController.navigate(R.id.searchResultFragment,bundle)
-                return false
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                // Filter your data based on newText
-                // Example: filterRecyclerView(newText)
-                return true
-            }
-        })
+
+
+
+
     }
 
     private fun setDrawer() {

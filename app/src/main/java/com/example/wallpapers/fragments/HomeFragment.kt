@@ -1,11 +1,13 @@
 package com.example.wallpapers.fragments
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -63,19 +65,57 @@ class HomeFragment : Fragment() {
 
 
         setRv()
-        Check()
         BackPage()
-
+        navigateBack()
 
 
 
         return binding.root
     }
 
+
+
+    private fun displayStringFromSharedPreferences() {
+        // Get SharedPreferences instance
+        val sharedPref = binding.root.context.getSharedPreferences(
+            "my_shared_pref", Context.MODE_PRIVATE
+        )
+
+        // Retrieve the string from SharedPreferences
+        val savedString = sharedPref.getString("my_string_key", "")
+
+        Toast.makeText(binding.root.context, savedString, Toast.LENGTH_SHORT).show()
+
+
+
+
+
+    }
+
+
+    private fun navigateBack() {
+        val navController = findNavController()
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            // Check if the destination is your first fragment
+            if (destination.id == R.id.hostFragment) {
+                // Your logic when navigating back to the first fragment
+                // This block will be executed whenever you navigate to the first fragment
+
+                displayStringFromSharedPreferences()
+
+            }
+        }
+
+    }
+
+
+
     private fun BackPage() {
         // Create a callback to handle back button press
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setTitle("Exit")
                     .setMessage("Are you sure you want to exit the app?")
@@ -84,6 +124,15 @@ class HomeFragment : Fragment() {
                     }
                     .setNegativeButton("No") { dialog, _ ->
                         dialog.dismiss()
+                        val sharedPref = binding.root.context.getSharedPreferences(
+                            "my_shared_pref", Context.MODE_PRIVATE
+                        )
+
+                        // Retrieve the string from SharedPreferences
+                        val savedString = sharedPref.getString("my_string_key", "")
+
+                        Toast.makeText(binding.root.context, savedString, Toast.LENGTH_SHORT).show()
+
                     }
                     .show()
             }
@@ -105,7 +154,7 @@ class HomeFragment : Fragment() {
         binding.rvAll.adapter = photoAdapter
 
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
-        userViewModel.word = name.toString()
+        userViewModel.setSearchQuery(name!!)
         userViewModel.liveData.observe(viewLifecycleOwner, Observer {
 
             GlobalScope.launch(Dispatchers.Main) {
@@ -116,50 +165,6 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun Check() {
-//                RetrofitClient.apiService.getListPhotos("27240519-6e85e045b4edde1049de33f01","spring","photo",true,1,15).enqueue(object:
-//        Callback<Rasmlar>{
-//            override fun onResponse(call: Call<Rasmlar>, response: Response<Rasmlar>) {
-//                val body = response.body()
-//                Log.d(TAG, "onResponse: ${body!!.hits}")
-//
-//            }
-//
-//            override fun onFailure(call: Call<Rasmlar>, t: Throwable) {
-//                Log.d(TAG, "onFailure: ${t.message}")
-//            }
-//
-//
-//        })
-
-
-    }
-
-
-//    private fun setRv() {
-//        photoAdapter = PhotoAdapter(object:PhotoAdapter.OnItemClickListener{
-//            override fun onItemClick(hit: Hit?) {
-//                var bundle = Bundle()
-//                bundle.putSerializable("wall",hit!!.largeImageURL)
-//
-//            }
-//
-//        })
-//        binding.rvAll.adapter = photoAdapter
-//
-//
-//        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
-//        userViewModel.word = name.toString()
-//        userViewModel.liveData.observe(viewLifecycleOwner, Observer {
-//
-//
-//            Log.d(TAG, "setRv:$name ")
-//
-//            GlobalScope.launch(Dispatchers.Main) {
-//                photoAdapter.submitData(it)
-//            }
-//        })
-//    }
 
 
     companion object {
