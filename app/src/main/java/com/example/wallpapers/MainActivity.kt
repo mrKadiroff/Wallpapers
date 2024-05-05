@@ -4,280 +4,183 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.wallpapers.adapters.ViewPagerAdapter
 import com.example.wallpapers.databinding.ActivityMainBinding
 import com.example.wallpapers.databinding.DialogueLayoutBinding
 import com.example.wallpapers.databinding.ItemTabBinding
 import com.example.wallpapers.ombor.setData
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
-    val tabArray = arrayOf(
-        "All",
-        "Car",
-        "Animals",
-        "Girls",
-        "Weather"
-    )
+
     lateinit var binding: ActivityMainBinding
-    private var lastClickedButton: ConstraintLayout? = null
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    lateinit var navController: NavController
+    private lateinit var drawerToggle: ActionBarDrawerToggle
+    private lateinit var callback: OnBackPressedCallback
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        enableEdgeToEdge()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar_main)
+        setSupportActionBar(toolbar)
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.purple_200))
+        navController = findNavController(R.id.hostFragment)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
 
 
-        setviewPager()
-        setDialuge()
+
+
+
+
+        setDrawer()
+        setSearch()
+
+
+
 
 
     }
 
-    private fun setDialuge() {
-        val alertDialog = AlertDialog.Builder(binding.root.context,R.style.dialog)
-        val dialog = alertDialog.create()
-        val dialogView = DialogueLayoutBinding.inflate(
-            LayoutInflater.from(binding.root.context),null,false
+
+
+    private fun setSearch() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Handle search query submission
+                Toast.makeText(this@MainActivity, "$query", Toast.LENGTH_SHORT).show()
+                var bundle = Bundle()
+                bundle.putSerializable("wall",query)
+                navController.navigate(R.id.searchResultFragment,bundle)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Filter your data based on newText
+                // Example: filterRecyclerView(newText)
+                return true
+            }
+        })
+    }
+
+    private fun setDrawer() {
+        val toolbar: Toolbar = findViewById(R.id.toolbar_main)
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val navView: NavigationView = findViewById(R.id.navigation_view)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.homeFragment,
+                R.id.popularFragment,
+                R.id.randomFragment,
+                R.id.favoriteFragment,
+            ), drawerLayout
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+
+
+        drawerToggle = ActionBarDrawerToggle(
+            this, binding.drawerLayout, binding.toolbarMain,
+            R.string.nav_open, R.string.nav_close
         )
 
-
-        val birinchi = dialogView.birinchi
-
-
-        val button1 = dialogView.backg1
-        val button2 = dialogView.backg2
-        val button3 = dialogView.backg3
-        val button4 = dialogView.backg4
-        val button5 = dialogView.backg5
-        val button6 = dialogView.backg6
-        val button7 = dialogView.backg7
-        val button8 = dialogView.backg8
-        val button9 = dialogView.backg9
+        drawerToggle.isDrawerIndicatorEnabled = true
+        binding.drawerLayout.addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
+        drawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
 
 
 
+        getSupportActionBar()!!.setDisplayShowTitleEnabled(false)
+        toolbar.subtitle = "Search..."
 
-
-
-
-
-        dialogView.birinchi.setOnClickListener {
-            val toString = dialogView.first.text.toString()
-            dialogView.experim.text = toString
-            onButtonClick(button1)
-        }
-
-        dialogView.ikkinchi.setOnClickListener {
-            val toString = dialogView.second.text.toString()
-            dialogView.experim.text = toString
-            onButtonClick(button2)
-        }
-
-        dialogView.uchinchi.setOnClickListener {
-            val toString = dialogView.third.text.toString()
-            dialogView.experim.text = toString
-            onButtonClick(button3)
-        }
-
-        dialogView.toriticnhi.setOnClickListener {
-            val toString = dialogView.fourth.text.toString()
-            dialogView.experim.text = toString
-            onButtonClick(button4)
-        }
-
-        dialogView.beshinchi.setOnClickListener {
-            val toString = dialogView.fifth.text.toString()
-            dialogView.experim.text = toString
-            onButtonClick(button5)
-        }
-
-        dialogView.oltinchi.setOnClickListener {
-            val toString = dialogView.sixth.text.toString()
-            dialogView.experim.text = toString
-            onButtonClick(button6)
-        }
-
-        dialogView.yettinchi.setOnClickListener {
-            val toString = dialogView.seveneth.text.toString()
-            dialogView.experim.text = toString
-            onButtonClick(button7)
-        }
-
-
-        dialogView.sakkizinchi.setOnClickListener {
-            val toString = dialogView.eighth.text.toString()
-            dialogView.experim.text = toString
-            onButtonClick(button8)
-        }
-
-
-        dialogView.toqqizinchi.setOnClickListener {
-            val toString = dialogView.ninth.text.toString()
-            dialogView.experim.text = toString
-            onButtonClick(button9)
-        }
-
-
-
-
-
-        dialogView.addd.setOnClickListener {
-            val toString = dialogView.experim.text.toString()
-
-            if (toString.isEmpty()){
-                Toast.makeText(binding.root.context, "Please select your current mood", Toast.LENGTH_SHORT).show()
-            }else{
-                dialog.cancel()
-                updateViewPager(toString)
+        // Traverse through the Toolbar's child views to find the subtitle TextView
+        for (i in 0 until toolbar.childCount) {
+            val view = toolbar.getChildAt(i)
+            if (view is TextView && view.text == toolbar.subtitle) {
+                // Set the text color of the subtitle
+                view.setTextColor(Color.WHITE)
+                break
             }
-
         }
 
 
 
 
-
-        dialogView.cancel.setOnClickListener {
-            dialog.cancel()
+        // Set the navigation item selected listener
+        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+            // Handle navigation item clicks here
+            when (menuItem.itemId) {
+                R.id.nav_account -> {
+                    // Handle click on Item 1
+                    showToast("Item 1 clicked")
+                }
+                R.id.nav_settings -> {
+                    // Handle click on Item 2
+                    showToast("Item 2 clicked")
+                }
+                // Add cases for other items if needed
+            }
+            // Close the drawer when item is clicked
+            true
         }
-
-
-
-
-
-
-        dialog.setView(dialogView.root)
-        dialog.show()
     }
 
-    private fun onButtonClick(clickedButton: ConstraintLayout) {
-
-        // Reset background color of the previously clicked button
-        lastClickedButton?.setBackgroundColor(Color.WHITE)
-
-        // Change background color of the current button
-        clickedButton.setBackgroundColor(Color.BLUE)
-
-        // Update last clicked button
-        lastClickedButton = clickedButton
+    private fun showToast(s: String) {
+        Toast.makeText(this, "Sikildi", Toast.LENGTH_SHORT).show()
+        navController.navigate(R.id.rawFragment)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
     }
 
-    private fun updateViewPager(toString: String) {
-        val viewPager = binding.viewPager
-        val tabLayout = binding.tabLayout
 
 
-//        if (toString == "Happy"){
-//          UpdateTabs(setData.tabArray1)
-//
-//
-//
-//        } else if (toString == "Sad"){
-//            Toast.makeText(this, toString, Toast.LENGTH_SHORT).show()
-//            UpdateTabs(setData.tabArray2)
-//        }
+    fun showBottomNavigation()
+    {
 
-
-
-
-        when (toString) {
-            "Happy" -> UpdateTabs(setData.tabArray1)
-            "Sad" -> UpdateTabs(setData.tabArray2)
-            "Energetic" -> UpdateTabs(setData.tabArray3)
-            "Calm" -> UpdateTabs(setData.tabArray4)
-            "Angry" -> UpdateTabs(setData.tabArray5)
-            "Stressed" -> UpdateTabs(setData.tabArray6)
-            "Inspired" -> UpdateTabs(setData.tabArray7)
-            "Playful" -> UpdateTabs(setData.tabArray8)
-            "Romantic" -> UpdateTabs(setData.tabArray9)
-            else -> println("No matching function for the input")
-        }
+        binding.toolbarMain.visibility = View.VISIBLE
 
 
 
     }
 
-    private fun UpdateTabs(tabbi: Array<String>) {
-        val viewPager = binding.viewPager
-        val tabLayout = binding.tabLayout
-        val adapter = ViewPagerAdapter(tabbi,supportFragmentManager, lifecycle)
-        viewPager.adapter = adapter
+    fun hideBottomNavigation()
+    {
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            val itemTabBinding: ItemTabBinding = ItemTabBinding.inflate(layoutInflater)
-            tab.customView = itemTabBinding.root
-            itemTabBinding.text.text = tabbi[position]
-            if (position == 0) {
-                itemTabBinding.circle.visibility = View.VISIBLE
-                itemTabBinding.text.setTextColor(Color.WHITE)
-            } else {
-                itemTabBinding.circle.visibility = View.INVISIBLE
-                itemTabBinding.text.setTextColor(Color.parseColor("#808a93"))
-            }
-
-        }.attach()
+        binding.toolbarMain.visibility = View.GONE
+        val fragmenttt = findViewById<View>(R.id.hostFragment)
     }
 
-    private fun setviewPager() {
-
-        val viewPager = binding.viewPager
-        val tabLayout = binding.tabLayout
-
-
-        val adapter = ViewPagerAdapter(setData.tabArray1,supportFragmentManager, lifecycle)
-        viewPager.adapter = adapter
-
-
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            val itemTabBinding: ItemTabBinding = ItemTabBinding.inflate(layoutInflater)
-            tab.customView = itemTabBinding.root
-            itemTabBinding.text.text = setData.tabArray1[position]
-            if (position == 0) {
-                itemTabBinding.circle.visibility = View.VISIBLE
-                itemTabBinding.text.setTextColor(Color.WHITE)
-            } else {
-                itemTabBinding.circle.visibility = View.INVISIBLE
-                itemTabBinding.text.setTextColor(Color.parseColor("#808a93"))
-            }
-
-        }.attach()
-
-
-
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val itemTabBinding = ItemTabBinding.bind(tab?.customView!!)
-                itemTabBinding.circle.visibility = View.VISIBLE
-                itemTabBinding.text.setTextColor(Color.WHITE)
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                val itemTabBinding = ItemTabBinding.bind(tab?.customView!!)
-                itemTabBinding.circle.visibility = View.INVISIBLE
-                itemTabBinding.text.setTextColor(Color.parseColor("#808a93"))
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-
-        })
-
-
-
+    override fun onResume() {
+        binding.toolbarMain.title = ""
+        super.onResume()
     }
+
+
+
 }

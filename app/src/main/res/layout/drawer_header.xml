@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#152C3F"
+    android:padding="16sp"
+    android:layout_height="192dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imagee"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_margin="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4K Full \nWallpapers"
+        android:textColor="@color/white"
+        android:layout_marginStart="12sp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@id/imagee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.09"
+        app:layout_constraintStart_toEndOf="@id/imagee"
+        app:layout_constraintTop_toTopOf="@id/imagee" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

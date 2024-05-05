@@ -1,10 +1,12 @@
 package com.example.wallpapers.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -48,6 +50,7 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     lateinit var photoAdapter: PhotoAdapter
     lateinit var userViewModel: UserViewModel
+    private lateinit var callback: OnBackPressedCallback
     private val TAG = "HomeFragment"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +64,7 @@ class HomeFragment : Fragment() {
 
         setRv()
         Check()
+        BackPage()
 
 
 
@@ -68,12 +72,33 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun BackPage() {
+        // Create a callback to handle back button press
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Exit")
+                    .setMessage("Are you sure you want to exit the app?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        requireActivity().finish()
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        }
+
+        // Add the callback to the fragment
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
     private fun setRv() {
         photoAdapter = PhotoAdapter(object:PhotoAdapter.OnItemClickListener{
             override fun onItemClick(hit: Hit?) {
                 var bundle = Bundle()
-//                bundle.putSerializable("wall",hit!!.largeImageURL)
-//                navController.navigate(R.id.rawFragment,bundle)
+                bundle.putSerializable("wall",hit!!.largeImageURL)
+                findNavController().navigate(R.id.rawFragment,bundle)
             }
 
         })

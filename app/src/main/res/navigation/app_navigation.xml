@@ -3,17 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
-    app:startDestination="@id/homeFragment2">
-
+    app:startDestination="@id/hostFragment">
     <fragment
-        android:id="@+id/homeFragment2"
-        android:name="com.example.wallpapers.fragments.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-    </fragment>
+        android:id="@+id/hostFragment"
+        android:name="com.example.wallpapers.fragments.HostFragment"
+        android:label="fragment_host"
+        tools:layout="@layout/fragment_host" />
     <fragment
         android:id="@+id/rawFragment"
         android:name="com.example.wallpapers.fragments.RawFragment"
         android:label="fragment_raw"
         tools:layout="@layout/fragment_raw" />
+    <fragment
+        android:id="@+id/searchResultFragment"
+        android:name="com.example.wallpapers.fragments.SearchResultFragment"
+        android:label="fragment_search_result"
+        tools:layout="@layout/fragment_search_result" />
 </navigation>
