@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.wallpapers"
+    namespace = "com.shoxruxbek.wallpapers"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.wallpapers"
+        applicationId = "com.shoxruxbek.wallpapers"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -67,4 +67,5 @@ dependencies {
     annotationProcessor (libs.compiler)
 
     implementation(libs.blur.layout)
+    implementation (libs.play.services.ads)
 }

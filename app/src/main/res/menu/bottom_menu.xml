@@ -3,21 +3,8 @@
 
     <item
         android:id="@+id/homeFragment"
-        android:title="Home"
+        android:title="App info"
         android:icon="@drawable/home"/>
-    <item
-        android:id="@+id/popularFragment"
-        android:title="News"
-        android:icon="@drawable/popular"/>
-    <item
-        android:id="@+id/randomFragment"
-        android:title="Profile"
-        android:icon="@drawable/random"/>
-
-    <item
-        android:id="@+id/favoriteFragment"
-        android:title="Profile"
-        android:icon="@drawable/heartempty"/>
 
 
 </menu>
