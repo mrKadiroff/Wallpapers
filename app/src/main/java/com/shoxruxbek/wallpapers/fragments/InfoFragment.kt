@@ -1,18 +1,28 @@
 package com.shoxruxbek.wallpapers.fragments
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.fragment.findNavController
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.shoxruxbek.wallpapers.MainActivity
 import com.shoxruxbek.wallpapers.R
+import com.shoxruxbek.wallpapers.adsshowing.WallpaperManager
 import com.shoxruxbek.wallpapers.databinding.FragmentHostBinding
 import com.shoxruxbek.wallpapers.databinding.FragmentInfoBinding
 
@@ -40,8 +50,9 @@ class InfoFragment : Fragment() {
     }
 
     lateinit var binding: FragmentInfoBinding
-
-
+    private var mInterstitialAd: InterstitialAd? = null
+    private  val TAG = "InfoFragment"
+    private lateinit var callback: OnBackPressedCallback
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,13 +60,14 @@ class InfoFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentInfoBinding.inflate(layoutInflater,container,false)
 
+//        count()
+
+
 
 
 
         return binding.root
     }
-
-
 
 
 

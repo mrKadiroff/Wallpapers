@@ -2,7 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_account"
-        android:title="App information" />
+        android:title="App information"
+        android:icon="@drawable/home"
+
+        />
+
+
+    <item
+        android:id="@+id/instagram"
+        android:title="Follows us on istagram"
+        android:icon="@drawable/instagram"/>
+
+
+    <item
+        android:id="@+id/telegram"
+        android:title="Follows us on telegram"
+        android:icon="@drawable/sdsd"/>
+
+
+    <item
+        android:id="@+id/share"
+        android:title="Share with your friends"
+        android:icon="@drawable/baseline_share_24"/>
 
 
 </menu>

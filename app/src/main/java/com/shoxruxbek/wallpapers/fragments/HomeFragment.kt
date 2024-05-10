@@ -142,6 +142,7 @@ class HomeFragment : Fragment() {
             override fun onItemClick(hit: Hit?) {
                 var bundle = Bundle()
                 bundle.putSerializable("wall",hit!!.largeImageURL)
+               bundle.putSerializable("wall1",hit.webformatURL)
                 findNavController().navigate(R.id.rawFragment,bundle)
             }
 
